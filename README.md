@@ -7,3 +7,4 @@
 - run 'npm install'
 - run 'npm start'
 
+If any questions feel free to contact me at: lepler.jacob@gmail.com
