@@ -15,9 +15,14 @@ const tempData = [
 function App() {
   const [history, setHistory] = useState(tempData);
 
+  const handleInputs = (inputs) => {
+
+
+  }
+
   return (
     <div className="App">
-      <CalcForm />
+      <CalcForm handleInputs={handleInputs} />
       <History history={history} />
     </div>
   );
