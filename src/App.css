@@ -57,6 +57,7 @@ Button:hover {
 
 .form-control:disabled {
   background: var(--dark);
+  
 }
 
 input[type="number"]::-webkit-inner-spin-button,

@@ -3,7 +3,8 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import { Component, useState } from "react";
+import { Component } from "react";
+import { getBTCPrice } from "../actions/crypto";
 
 class CalcForm extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class CalcForm extends Component {
       entry: 0.0,
       stop: 0.0,
       calculatedPosition: 0.0,
+      positionInCrypto: 0.0,
     };
   }
 
@@ -26,11 +28,17 @@ class CalcForm extends Component {
 
   calculatePosition = async (e) => {
     e.preventDefault();
+
+    const { data } = await getBTCPrice();
+
     const { crypto, position, capital, risk, stop, entry, calculatedPosition } =
       this.state;
     if (position == "short") {
       const result = (capital * risk) / (stop / entry - 1) / 100;
       await this.setState({ calculatedPosition: Math.round(result) });
+      await this.setState({
+        positionInCrypto: calculatedPosition / data.price,
+      });
     }
     if (position == "long") {
       const result = (capital * risk) / (entry / stop - 1) / 100;
@@ -134,13 +142,32 @@ class CalcForm extends Component {
               onChange={this.handleChange}
             />
           </FloatingLabel>
-
-          <Form.Control
-            className="form-input"
-            type="calculatedPosition"
-            value={this.state.calculatedPosition}
-            disabled
-          />
+          <Row>
+            <Col>
+              <Form.Control
+                className="form-input"
+                type="calculatedPosition"
+                value={this.state.calculatedPosition}
+                disabled
+              />
+            </Col>
+            <Col>
+              <Form.Control
+                className="form-input"
+                type="calculatedPosition"
+                value={this.state.calculatedPosition}
+                disabled
+              />
+            </Col>
+            <Col>
+              <Form.Control
+                className="form-input"
+                type="calculatedPosition"
+                value={this.state.calculatedPosition}
+                disabled
+              />
+            </Col>
+          </Row>
           <Button type="submit">Submit</Button>
         </Form>
       </div>
