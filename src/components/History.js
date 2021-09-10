@@ -1,9 +1,6 @@
 import Table from "react-bootstrap/Table";
 
 const History = ({ history }) => {
-
-    
-
   return (
     <Table striped bordered hover variant="dark">
       <thead>
@@ -19,20 +16,22 @@ const History = ({ history }) => {
         </tr>
       </thead>
       <tbody>
-        {history.map((position,index) => {
-          return (
-            <tr>
-              <td>{index + 1}</td>
-              <td>{position[0]}</td>
-              <td>{position[1]}</td>
-              <td>{position[2]}</td>
-              <td>{position[3]}</td>
-              <td>{position[4]}</td>
-              <td>{position[5]}</td>
-              <td>{position[6]}</td>
-            </tr>
-          );
-        })}
+        {history.map(
+          ({ crypto, capital, risk, entry, stop, stopPercentage, position, calculatedPosition }) => {
+            return (
+              <tr key={position}>
+                <td>{1}</td>
+                <td>{crypto}</td>
+                <td>{capital}</td>
+                <td>{risk}</td>
+                <td>{entry}</td>
+                <td>{stop}</td>
+                <td>{stopPercentage && stopPercentage.toFixed(2)}</td>
+                <td>{calculatedPosition}</td>
+              </tr>
+            );
+          }
+        )}
       </tbody>
     </Table>
   );
