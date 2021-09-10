@@ -3,22 +3,19 @@ import History from "./components/History";
 import { useState } from "react";
 import "./App.css";
 
-/* Position formula
-  Trade amount = Risk / (Stoploss / 100)
-*/
-
 const tempData = [
-  ["BTC", 1000, 2, 47500, 47250, 0.53, 3773],
-  ["ETH", 1000, 2, 3500, 3350, 4.29, 466],
+  {crypto: "BTC", capital: 1000, risk: 2, entry:47500, stop: 47250, stopPercentage: 0.53, calculatedPosition: 3773, position: "long"},
+  {crypto: "BTC", capital: 1000, risk: 2, entry:47500, stop: 47250, stopPercentage: 0.53, calculatedPosition: 3773, position: "long"},
 ];
 
 function App() {
   const [history, setHistory] = useState(tempData);
 
-  const handleCalc = (inputs) => {
-    console.log(inputs)
+  const handleCalc = (trade) => {
+    console.log(trade)
+    setHistory([...history, trade])
   }
-
+  
   return (
     <div className="App">
       <CalcForm handleCalc={handleCalc} />
