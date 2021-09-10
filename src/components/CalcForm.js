@@ -4,45 +4,68 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { Component } from "react";
-import { getBTCPrice } from "../actions/crypto";
+import { getBTCPrice, getETHPrice } from "../actions/crypto";
 
 class CalcForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       crypto: "BTC",
-      position: "position",
+      position: "short",
       capital: 1000,
       risk: 1.0,
-      entry: 0.0,
-      stop: 0.0,
+      entry: 49847,
+      stop: 52057,
+      stopPercentage: 0.0,
       calculatedPosition: 0.0,
       positionInCrypto: 0.0,
     };
   }
 
   handleChange = (e) => {
-    console.log(e.target.value, e.target.name);
     this.setState({ [e.target.name]: e.target.value });
   };
 
   calculatePosition = async (e) => {
     e.preventDefault();
+    const {
+      crypto,
+      position,
+      capital,
+      risk,
+      stop,
+      entry,
+      stopPercentage,
+      calculatedPosition,
+    } = this.state;
 
-    const { data } = await getBTCPrice();
+    let currPrice;
 
-    const { crypto, position, capital, risk, stop, entry, calculatedPosition } =
-      this.state;
+    if (crypto == "ETH") {
+      const { data } = await getETHPrice();
+      currPrice = data;
+    }
+
+    if (crypto == "BTC") {
+      const { data } = await getBTCPrice();
+      currPrice = data;
+    }
+
     if (position == "short") {
       const result = (capital * risk) / (stop / entry - 1) / 100;
       await this.setState({ calculatedPosition: Math.round(result) });
       await this.setState({
-        positionInCrypto: calculatedPosition / data.price,
+        positionInCrypto: calculatedPosition / currPrice,
+        stopPercentage: stop / entry - 1,
       });
     }
     if (position == "long") {
       const result = (capital * risk) / (entry / stop - 1) / 100;
       await this.setState({ calculatedPosition: Math.round(result) });
+      await this.setState({
+        positionInCrypto: calculatedPosition / currPrice,
+        stopPercentage: entry / stop - 1,
+      });
     }
 
     this.props.handleCalc({
@@ -51,6 +74,7 @@ class CalcForm extends Component {
       capital,
       risk,
       stop,
+      stopPercentage,
       entry,
       calculatedPosition,
     });
@@ -67,6 +91,7 @@ class CalcForm extends Component {
                 aria-label="select crypto"
                 onChange={this.handleChange}
                 name="crypto"
+                defaultValue="btc"
               >
                 <option>Select Crypto</option>
                 <option value="btc">BTC</option>
@@ -79,9 +104,12 @@ class CalcForm extends Component {
                 aria-label="select position"
                 onChange={this.handleChange}
                 name="position"
+                defaultValue="short"
               >
                 <option>Select Side</option>
-                <option value="short">Short</option>
+                <option defaultValue value="short">
+                  Short
+                </option>
                 <option value="long">Long</option>
               </Form.Select>
             </Col>
