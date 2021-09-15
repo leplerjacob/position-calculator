@@ -1,11 +1,14 @@
 import Table from "react-bootstrap/Table";
+import {useEffect} from 'react'
 
 const History = ({ history }) => {
+
   return (
     <Table striped bordered hover variant="dark">
       <thead>
         <tr>
           <th>#</th>
+          <th>Type</th>
           <th>Crypto</th>
           <th>Capital</th>
           <th>Risk</th>
@@ -17,16 +20,18 @@ const History = ({ history }) => {
       </thead>
       <tbody>
         {history.map(
-          ({ crypto, capital, risk, entry, stop, stopPercentage, position, calculatedPosition }) => {
+          ({ index, crypto, capital, risk, entry, stop, stopPercentage, position, calculatedPosition }) => {
+            console.log(stopPercentage)
             return (
-              <tr key={position}>
-                <td>{1}</td>
+              <tr key={index}>
+                <td>{index}</td>
+                <td>{position}</td>
                 <td>{crypto}</td>
                 <td>{capital}</td>
                 <td>{risk}</td>
                 <td>{entry}</td>
                 <td>{stop}</td>
-                <td>{stopPercentage && stopPercentage.toFixed(2)}</td>
+                <td>{stopPercentage}</td>
                 <td>{calculatedPosition}</td>
               </tr>
             );
