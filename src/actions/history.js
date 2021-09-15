@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-export async function postTrade(tradeMade) {
-    await axios.post('http://localhost:3000/history', tradeMade)
+export async function postTrade(tradeDetails) {
+    let data = await axios.post('http://localhost:3001/history', tradeDetails)
     return data
 }
 
