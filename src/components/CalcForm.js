@@ -5,6 +5,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { Component } from "react";
 import { getBTCPrice, getETHPrice } from "../actions/crypto";
+import { postTrade } from "../actions/history";
 
 class CalcForm extends Component {
   constructor(props) {
@@ -28,16 +29,7 @@ class CalcForm extends Component {
 
   calculatePosition = async (e) => {
     e.preventDefault();
-    const {
-      crypto,
-      position,
-      capital,
-      risk,
-      stop,
-      entry,
-      stopPercentage,
-      calculatedPosition,
-    } = this.state;
+    const { crypto, position, capital, risk, stop, entry } = this.state;
 
     let currPrice;
 
@@ -53,31 +45,38 @@ class CalcForm extends Component {
 
     if (position == "short") {
       const result = (capital * risk) / (stop / entry - 1) / 100;
-      await this.setState({ calculatedPosition: Math.round(result) });
       await this.setState({
-        positionInCrypto: calculatedPosition / currPrice,
-        stopPercentage: stop / entry - 1,
+        calculatedPosition: Math.round(result),
+      });
+      await this.setState({
+        // TODO: include positionInCrypto for both long and short positions.
+
+        // positionInCrypto: calculatedPosition / currPrice,
+        stopPercentage: Math.round((stop / entry - 1) * 100) / 100,
       });
     }
     if (position == "long") {
       const result = (capital * risk) / (entry / stop - 1) / 100;
       await this.setState({ calculatedPosition: Math.round(result) });
       await this.setState({
-        positionInCrypto: calculatedPosition / currPrice,
-        stopPercentage: entry / stop - 1,
+        // positionInCrypto: calculatedPosition / currPrice,
+        stopPercentage: Math.round((entry / stop - 1) * 100) / 100,
       });
     }
-
-    this.props.handleCalc({
+    
+    let tradeDetails = {
       crypto,
       position,
       capital,
       risk,
       stop,
-      stopPercentage,
       entry,
-      calculatedPosition,
-    });
+      stopPercentage: this.state.stopPercentage,
+      calculatedPosition: this.state.calculatedPosition,
+    };
+
+    this.props.handleCalc(tradeDetails);
+    postTrade(tradeDetails);
   };
 
   render() {
@@ -183,7 +182,7 @@ class CalcForm extends Component {
               <Form.Control
                 className="form-input"
                 type="calculatedPosition"
-                value={this.state.calculatedPosition}
+                value={0.0}
                 disabled
               />
             </Col>
@@ -191,7 +190,7 @@ class CalcForm extends Component {
               <Form.Control
                 className="form-input"
                 type="calculatedPosition"
-                value={this.state.calculatedPosition}
+                value={0.0}
                 disabled
               />
             </Col>
