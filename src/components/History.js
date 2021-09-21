@@ -1,7 +1,10 @@
 import Table from "react-bootstrap/Table";
 import {useEffect} from 'react'
 
-const History = ({ history }) => {
+const History = ({ history, handleDelete }) => {
+
+// TODO: Add a delete button for each row
+// TODO: Add a button to copy any particular metric
 
   return (
     <Table striped bordered hover variant="dark">
@@ -21,7 +24,6 @@ const History = ({ history }) => {
       <tbody>
         {history.map(
           ({ index, crypto, capital, risk, entry, stop, stopPercentage, position, calculatedPosition }) => {
-            console.log(stopPercentage)
             return (
               <tr key={index}>
                 <td>{index}</td>
@@ -33,6 +35,7 @@ const History = ({ history }) => {
                 <td>{stop}</td>
                 <td>{stopPercentage}</td>
                 <td>{calculatedPosition}</td>
+                <td onClick={() => handleDelete(index)}></td>
               </tr>
             );
           }
