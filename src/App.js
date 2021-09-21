@@ -16,7 +16,6 @@ const tempData = [
     position: "long",
   },
 ];
-
 const App = () => {
   const [history, setHistory] = useState(tempData);
 
@@ -25,10 +24,14 @@ const App = () => {
     await setHistory([...history, trade]);
   };
 
+  const handleDelete = async(index) => {
+    console.log(index)
+  }
+
   return (
     <div className="App">
       <CalcForm handleCalc={handleCalc} />
-      <History history={history} />
+      <History history={history} handleDelete={handleDelete} />
     </div>
   );
 };
