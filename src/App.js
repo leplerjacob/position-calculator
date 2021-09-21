@@ -1,6 +1,7 @@
 import CalcForm from "./components/CalcForm";
 import History from "./components/History";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { postTrade, deleteTrade } from "./actions/history";
 import "./App.css";
 
 const tempData = [
@@ -22,11 +23,21 @@ const App = () => {
   const handleCalc = async (trade) => {
     trade["index"] = history.length + 1;
     await setHistory([...history, trade]);
+    postTrade(trade);
   };
 
   const handleDelete = async(index) => {
     console.log(index)
+    // TODO: Develop delete function to backend
+    await setHistory(history.splice(index, 1))
+    await deleteTrade(index)
   }
+
+  /*
+  this.setState({people: this.state.people.filter(function(person) { 
+        return person !== e.target.value 
+    })});
+  */ 
 
   return (
     <div className="App">
