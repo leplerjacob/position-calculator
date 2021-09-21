@@ -5,7 +5,6 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { Component } from "react";
 import { getBTCPrice, getETHPrice } from "../actions/crypto";
-import { postTrade } from "../actions/history";
 
 class CalcForm extends Component {
   // TODO: reset form after submission
@@ -80,7 +79,6 @@ class CalcForm extends Component {
     };
 
     this.props.handleCalc(tradeDetails);
-    postTrade(tradeDetails);
   };
 
   render() {
