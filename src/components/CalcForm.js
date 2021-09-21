@@ -8,6 +8,9 @@ import { getBTCPrice, getETHPrice } from "../actions/crypto";
 import { postTrade } from "../actions/history";
 
 class CalcForm extends Component {
+  // TODO: reset form after submission
+
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -22,6 +25,7 @@ class CalcForm extends Component {
       positionInCrypto: 0.0,
     };
   }
+
 
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
